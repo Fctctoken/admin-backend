@@ -1,53 +1,57 @@
-const Deposit = require('../models/Deposit');
+const depositModel = require('../models/depositModel');
 
-exports.getDeposits = async (req, res) => {
-  try {
-    const deposits = await Deposit.findAll();
-    res.json(deposits);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const getAllDeposits = (req, res) => {
+    depositModel.getAllDeposits((err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json(results);
+    });
 };
 
-exports.createDeposit = async (req, res) => {
-  const { amount } = req.body;
-
-  try {
-    const deposit = await Deposit.create({ amount });
-    res.json(deposit);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const getDepositById = (req, res) => {
+    const id = req.params.id;
+    depositModel.getDepositById(id, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json(results[0]);
+    });
 };
 
-exports.approveDeposit = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const deposit = await Deposit.findByPk(id);
-    if (!deposit) return res.status(404).json({ message: 'Deposit not found' });
-
-    deposit.status = 'approved';
-    await deposit.save();
-
-    res.json({ message: 'Deposit approved' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const createDeposit = (req, res) => {
+    const deposit = req.body;
+    depositModel.createDeposit(deposit, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ id: results.insertId, ...deposit });
+    });
 };
 
-exports.rejectDeposit = async (req, res) => {
-  const { id } = req.params;
+const updateDepositStatus = (req, res) => {
+    const id = req.params.id;
+    const { status } = req.body;
+    depositModel.updateDepositStatus(id, status, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json({ id, status });
+    });
+};
 
-  try {
-    const deposit = await Deposit.findByPk(id);
-    if (!deposit) return res.status(404).json({ message: 'Deposit not found' });
+const deleteDeposit = (req, res) => {
+    const id = req.params.id;
+    depositModel.deleteDeposit(id, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json({ message: 'Deposit deleted successfully' });
+    });
+};
 
-    deposit.status = 'rejected';
-    await deposit.save();
+const getTodaysDeposits = (req, res) => {
+    depositModel.getTodaysDeposits((err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json(results);
+    });
+};
 
-    res.json({ message: 'Deposit rejected' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+module.exports = {
+    getAllDeposits,
+    getDepositById,
+    createDeposit,
+    updateDepositStatus,
+    deleteDeposit,
+    getTodaysDeposits,
 };

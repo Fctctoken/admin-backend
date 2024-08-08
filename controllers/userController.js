@@ -1,26 +1,26 @@
-const User = require('../models/User');
+const userModel = require('../models/userModel');
+const bcrypt = require('bcrypt');
 
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await User.findAll({ where: { role: 'customer' } });
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const changePassword = (req, res) => {
+    const { userId, oldPassword, newPassword } = req.body;
+
+    userModel.getUserById(userId, (err, results) => {
+        if (err) return res.status(500).send(err);
+        if (results.length === 0) return res.status(404).send('User not found');
+
+        const user = results[0];
+        bcrypt.compare(oldPassword, user.password, (err, isMatch) => {
+            if (err) return res.status(500).send(err);
+            if (!isMatch) return res.status(400).send('Old password is incorrect');
+
+            userModel.updateUserPassword(userId, newPassword, (err, results) => {
+                if (err) return res.status(500).send(err);
+                res.status(200).send('Password updated successfully');
+            });
+        });
+    });
 };
 
-exports.toggleUserStatus = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const user = await User.findByPk(id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    user.isActive = !user.isActive;
-    await user.save();
-
-    res.json({ message: 'User status updated' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+module.exports = {
+    changePassword,
 };

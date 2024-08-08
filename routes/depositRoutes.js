@@ -1,15 +1,13 @@
 const express = require('express');
-const { getDeposits, createDeposit, approveDeposit, rejectDeposit } = require('../controllers/depositController');
-const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
+const depositController = require('../controllers/depositController');
 
 const router = express.Router();
 
-router.use(authMiddleware);
-router.use(adminMiddleware);
-
-router.get('/', getDeposits);
-router.post('/', createDeposit);
-router.post('/approve/:id', approveDeposit);
-router.post('/reject/:id', rejectDeposit);
+router.get('/', depositController.getAllDeposits);
+router.get('/:id', depositController.getDepositById);
+router.post('/', depositController.createDeposit);
+router.put('/:id', depositController.updateDepositStatus);
+router.delete('/:id', depositController.deleteDeposit);
+router.get('/today', depositController.getTodaysDeposits);
 
 module.exports = router;

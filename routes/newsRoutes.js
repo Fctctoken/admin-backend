@@ -1,15 +1,11 @@
 const express = require('express');
-const { getNews, createNews, updateNews, deleteNews } = require('../controllers/newsController');
-const { authMiddleware, adminMiddleware } = require('../middlewares/authMiddleware');
+const newsController = require('../controllers/newsController');
 
 const router = express.Router();
 
-router.use(authMiddleware);
-router.use(adminMiddleware);
-
-router.get('/', getNews);
-router.post('/', createNews);
-router.put('/:id', updateNews);
-router.delete('/:id', deleteNews);
+router.get('/', newsController.getAllNews);
+router.get('/:id', newsController.getNewsById);
+router.post('/', newsController.createNews);
+router.delete('/:id', newsController.deleteNews);
 
 module.exports = router;

@@ -1,52 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const sequelize = require('./config/database');
-const authRoutes = require('./routes/authRoutes');
-const communityRoutes = require('./routes/communityRoutes');
+const bodyParser = require('body-parser');
+const config = require('./config');
+const memberRoutes = require('./routes/memberRoutes');
 const depositRoutes = require('./routes/depositRoutes');
-const fundRoutes = require('./routes/fundRoutes');
-const settingsRoutes = require('./routes/settingsRoutes');
+const newsRoutes = require('./routes/newsRoutes');
 const userRoutes = require('./routes/userRoutes');
-const withdrawRoutes = require('./routes/withdrawRoutes');
-const newsRoutes = require('./routes/newsRoutes'); // New Route
-const walletRoutes = require('./routes/walletRoutes'); // New Route
-const { errorHandler } = require('./middlewares/errorHandler');
-
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8000;
 
-// Middleware
-app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/community', communityRoutes);
+app.use('/api/members', memberRoutes);
 app.use('/api/deposits', depositRoutes);
-app.use('/api/funds', fundRoutes);
-app.use('/api/settings', settingsRoutes);
+app.use('/api/news', newsRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/withdrawals', withdrawRoutes);
-app.use('/api/news', newsRoutes); // New Route
-app.use('/api/wallets', walletRoutes); // New Route
 
-// Error handling middleware
-app.use(errorHandler);
-
-// Connect to MySQL
-sequelize.authenticate()
-  .then(() => console.log('MySQL connected'))
-  .catch((error) => console.error('Unable to connect to MySQL:', error));
-
-// Test route
-app.get('/', (req, res) => {
-  res.send('Server is running');
-});
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(config.port, () => {
+    console.log(`Server is running on port ${config.port}`);
 });

@@ -1,54 +1,39 @@
-const News = require('../models/news');
+const newsModel = require('../models/newsModel');
 
-exports.getNews = async (req, res) => {
-  try {
-    const news = await News.findAll();
-    res.json(news);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const getAllNews = (req, res) => {
+    newsModel.getAllNews((err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json(results);
+    });
 };
 
-exports.createNews = async (req, res) => {
-  const { title, content } = req.body;
-
-  try {
-    const news = await News.create({ title, content });
-    res.json(news);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const getNewsById = (req, res) => {
+    const id = req.params.id;
+    newsModel.getNewsById(id, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json(results[0]);
+    });
 };
 
-exports.updateNews = async (req, res) => {
-  const { id } = req.params;
-  const { title, content } = req.body;
-
-  try {
-    const news = await News.findByPk(id);
-    if (!news) return res.status(404).json({ message: 'News not found' });
-
-    news.title = title;
-    news.content = content;
-    await news.save();
-
-    res.json({ message: 'News updated' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+const createNews = (req, res) => {
+    const news = req.body;
+    newsModel.createNews(news, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).json({ id: results.insertId, ...news });
+    });
 };
 
-exports.deleteNews = async (req, res) => {
-  const { id } = req.params;
+const deleteNews = (req, res) => {
+    const id = req.params.id;
+    newsModel.deleteNews(id, (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.status(200).json({ message: 'News deleted successfully' });
+    });
+};
 
-  try {
-    const news = await News.findByPk(id);
-    if (!news) return res.status(404).json({ message: 'News not found' });
-
-    await news.destroy();
-
-    res.json({ message: 'News deleted' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+module.exports = {
+    getAllNews,
+    getNewsById,
+    createNews,
+    deleteNews,
 };
