@@ -9,6 +9,8 @@ const fundRoutes = require('./routes/fundRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const userRoutes = require('./routes/userRoutes');
 const withdrawRoutes = require('./routes/withdrawRoutes');
+const newsRoutes = require('./routes/newsRoutes'); // New Route
+const walletRoutes = require('./routes/walletRoutes'); // New Route
 const { errorHandler } = require('./middlewares/errorHandler');
 
 dotenv.config();
@@ -28,6 +30,8 @@ app.use('/api/funds', fundRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/withdrawals', withdrawRoutes);
+app.use('/api/news', newsRoutes); // New Route
+app.use('/api/wallets', walletRoutes); // New Route
 
 // Error handling middleware
 app.use(errorHandler);
