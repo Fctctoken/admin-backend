@@ -1,5 +1,5 @@
 const userModel = require('../models/userModel');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs'); // Switched to bcryptjs
 
 // Function to get a user by ID
 const getUserById = (req, res) => {
@@ -24,9 +24,14 @@ const updateUserPassword = (req, res) => {
             if (err) return res.status(500).json({ error: err.message });
             if (!isMatch) return res.status(400).json({ message: 'Old password is incorrect' });
 
-            userModel.updateUserPassword(userId, newPassword, (err) => {
+            // Hash the new password before saving it to the database
+            bcrypt.hash(newPassword, 10, (err, hash) => {
                 if (err) return res.status(500).json({ error: err.message });
-                res.json({ message: 'Password updated successfully' });
+
+                userModel.updateUserPassword(userId, hash, (err) => { // Save hashed password
+                    if (err) return res.status(500).json({ error: err.message });
+                    res.json({ message: 'Password updated successfully' });
+                });
             });
         });
     });
@@ -35,11 +40,20 @@ const updateUserPassword = (req, res) => {
 // Function to create a new user
 const createUser = (req, res) => {
     const userData = req.body;
-    userModel.createUser(userData, (err, results) => {
+
+    // Hash the user's password before saving
+    bcrypt.hash(userData.password, 10, (err, hash) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.status(201).json({ message: 'User created successfully', userId: results.insertId });
+        userData.password = hash; // Replace plain password with hashed password
+
+        userModel.createUser(userData, (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.status(201).json({ message: 'User created successfully', userId: results.insertId });
+        });
     });
 };
 
