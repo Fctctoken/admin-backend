@@ -3,10 +3,10 @@ const withdrawalsController = require('../controllers/withdrawalsController');
 
 const router = express.Router();
 
-// GET /api/withdrawals - Retrieve all withdrawal requests
+// Route to get all withdrawals
 router.get('/', withdrawalsController.getWithdrawals);
 
-// PUT /api/withdrawals/status - Update the status of a withdrawal request
+// Route to update the status of a withdrawal (Approve or Reject)
 router.put('/status', withdrawalsController.updateWithdrawalStatus);
 
 module.exports = router;

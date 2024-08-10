@@ -10,7 +10,7 @@ db.connect((err) => {
 });
 
 const getTotalBalance = (callback) => {
-    const query = `SELECT SUM(balance) AS totalBalance FROM Users`; // Replace `Users` with your relevant table
+    const query = `SELECT SUM(balance) AS totalBalance FROM Customer_Users`; // Updated table name
     db.query(query, (err, results) => {
         if (err) {
             return callback(err);

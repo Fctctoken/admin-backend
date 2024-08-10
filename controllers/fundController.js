@@ -1,3 +1,4 @@
+// controllers/addFundController.js
 const fundModel = require('../models/fundModel');
 
 const getTodaysFunds = (req, res) => {

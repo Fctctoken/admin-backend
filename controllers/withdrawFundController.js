@@ -1,5 +1,6 @@
 const withdrawFundModel = require('../models/withdrawFundModel');
 
+// Get all withdrawal records
 const getAllWithdrawFunds = (req, res) => {
     withdrawFundModel.getAllWithdrawFunds((err, results) => {
         if (err) {
@@ -9,6 +10,7 @@ const getAllWithdrawFunds = (req, res) => {
     });
 };
 
+// Search for specific withdrawal records
 const searchWithdrawFunds = (req, res) => {
     const { search } = req.body;
     withdrawFundModel.searchWithdrawFunds(search, (err, results) => {

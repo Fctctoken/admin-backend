@@ -3,6 +3,7 @@ const todayUnpaidWithdrawalController = require('../controllers/todayUnpaidWithd
 
 const router = express.Router();
 
+// Route to get unpaid withdrawals with pagination
 router.get('/unpaid', todayUnpaidWithdrawalController.getUnpaidWithdrawals);
 
 module.exports = router;

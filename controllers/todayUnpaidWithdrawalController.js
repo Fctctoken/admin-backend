@@ -1,5 +1,6 @@
 const todayUnpaidWithdrawalModel = require('../models/todayUnpaidWithdrawalModel');
 
+// Get unpaid withdrawals with pagination
 const getUnpaidWithdrawals = (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const rowsPerPage = parseInt(req.query.rowsPerPage) || 15;

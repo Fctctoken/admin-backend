@@ -1,5 +1,6 @@
 const newsModel = require('../models/newsModel');
 
+// Get all news
 const getAllNews = (req, res) => {
     newsModel.getAllNews((err, results) => {
         if (err) return res.status(500).send(err);
@@ -7,6 +8,7 @@ const getAllNews = (req, res) => {
     });
 };
 
+// Get news by ID
 const getNewsById = (req, res) => {
     const id = req.params.id;
     newsModel.getNewsById(id, (err, results) => {
@@ -15,6 +17,7 @@ const getNewsById = (req, res) => {
     });
 };
 
+// Create new news entry
 const createNews = (req, res) => {
     const news = req.body;
     newsModel.createNews(news, (err, results) => {
@@ -23,6 +26,7 @@ const createNews = (req, res) => {
     });
 };
 
+// Delete news by ID
 const deleteNews = (req, res) => {
     const id = req.params.id;
     newsModel.deleteNews(id, (err, results) => {

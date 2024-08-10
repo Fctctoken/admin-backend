@@ -1,11 +1,13 @@
-// routes/userRoutes.js
-
 const express = require('express');
 const userController = require('../controllers/userController');
 
 const router = express.Router();
 
-// Existing routes (getUserById, updateUserPassword, etc.)
+// Route to get a user by ID
+router.get('/users/:id', userController.getUserById);
+
+// Route to update a user's password
+router.put('/users/password', userController.updateUserPassword);
 
 // Route to create a new user
 router.post('/users', userController.createUser);

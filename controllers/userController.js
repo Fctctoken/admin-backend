@@ -1,5 +1,5 @@
 const userModel = require('../models/userModel');
-const bcrypt = require('bcryptjs'); // Switched to bcryptjs
+const bcrypt = require('bcryptjs');
 
 // Function to get a user by ID
 const getUserById = (req, res) => {
@@ -24,11 +24,10 @@ const updateUserPassword = (req, res) => {
             if (err) return res.status(500).json({ error: err.message });
             if (!isMatch) return res.status(400).json({ message: 'Old password is incorrect' });
 
-            // Hash the new password before saving it to the database
             bcrypt.hash(newPassword, 10, (err, hash) => {
                 if (err) return res.status(500).json({ error: err.message });
 
-                userModel.updateUserPassword(userId, hash, (err) => { // Save hashed password
+                userModel.updateUserPassword(userId, hash, (err) => {
                     if (err) return res.status(500).json({ error: err.message });
                     res.json({ message: 'Password updated successfully' });
                 });
@@ -41,12 +40,11 @@ const updateUserPassword = (req, res) => {
 const createUser = (req, res) => {
     const userData = req.body;
 
-    // Hash the user's password before saving
     bcrypt.hash(userData.password, 10, (err, hash) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        userData.password = hash; // Replace plain password with hashed password
+        userData.password = hash;
 
         userModel.createUser(userData, (err, results) => {
             if (err) {
