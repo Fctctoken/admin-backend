@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs'); // Switched to bcryptjs
 const config = require('../config');
 
 const connection = mysql.createConnection(config.db);
