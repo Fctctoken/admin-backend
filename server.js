@@ -15,7 +15,6 @@ const balanceRoutes = require('./routes/balanceRoutes');
 const inactiveMembersRoutes = require('./routes/inactiveMembersRoutes');
 const withdrawFundRoutes = require('./routes/withdrawFundRoutes');
 const adminCommunityRoutes = require('./routes/adminCommunityRoutes'); // Import the routes
-const loginRoutes = (require'./routes/loginRoutes');
 const app = express();
 
 app.use(cors());
@@ -35,7 +34,6 @@ app.use('/api/inactive-members', inactiveMembersRoutes);
 app.use('/api', withdrawFundRoutes); // Ensure this is the correct route for your withdraw fund routes
 app.use('/api/withdrawals/unpaid', todayUnpaidWithdrawalRoutes);
 app.use('/api/community', adminCommunityRoutes); // Add this line
-app.use('/api/login', loginRoutes);
 
 
 // Start the server
