@@ -15,8 +15,7 @@ const balanceRoutes = require('./routes/balanceRoutes');
 const inactiveMembersRoutes = require('./routes/inactiveMembersRoutes');
 const withdrawFundRoutes = require('./routes/withdrawFundRoutes');
 const adminCommunityRoutes = require('./routes/adminCommunityRoutes'); // Import the routes
-
-
+const loginRoutes = (require'./routes/loginRoutes');
 const app = express();
 
 app.use(cors());
