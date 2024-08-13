@@ -36,6 +36,7 @@ app.use('/api/inactive-members', inactiveMembersRoutes);
 app.use('/api', withdrawFundRoutes); // Ensure this is the correct route for your withdraw fund routes
 app.use('/api/withdrawals/unpaid', todayUnpaidWithdrawalRoutes);
 app.use('/api/community', adminCommunityRoutes); // Add this line
+app.use('/api/login', loginRoutes);
 
 
 // Start the server
